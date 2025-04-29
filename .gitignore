@@ -5,7 +5,7 @@ build/
 dist/
 wheels/
 *.egg-info
-
+logs/
 extract-text/unpack-rpy/
 extract-text/output/
 .env

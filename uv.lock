@@ -155,6 +155,7 @@ dependencies = [
     { name = "llama-index" },
     { name = "llama-index-embeddings-huggingface" },
     { name = "llama-index-llms-deepseek" },
+    { name = "llama-index-llms-ollama" },
     { name = "openai" },
     { name = "python-dotenv" },
     { name = "sentence-transformers" },
@@ -165,6 +166,7 @@ requires-dist = [
     { name = "llama-index", specifier = ">=0.12.33" },
     { name = "llama-index-embeddings-huggingface", specifier = ">=0.5.3" },
     { name = "llama-index-llms-deepseek", specifier = ">=0.1.1" },
+    { name = "llama-index-llms-ollama", specifier = ">=0.5.4" },
     { name = "openai", specifier = ">=1.76.0" },
     { name = "python-dotenv", specifier = ">=1.1.0" },
     { name = "sentence-transformers", specifier = ">=4.1.0" },
@@ -623,6 +625,19 @@ wheels = [
 ]
 
 [[package]]
+name = "llama-index-llms-ollama"
+version = "0.5.4"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "llama-index-core" },
+    { name = "ollama" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/36/05/bd6a1006d93566a65cb5ef8318bca8695a9a7cfc6064c1bd218aae3a5ded/llama_index_llms_ollama-0.5.4.tar.gz", hash = "sha256:e5e7e7a4e65478c762906d08f594647d8148ffdc32ae908d56b73c0df8ea04f2", size = 8218, upload_time = "2025-03-27T01:05:04.409Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/33/1d/f000f50525dff87e6a78d7d7623720fdfc14b95a04b25e2bc4e936af2907/llama_index_llms_ollama-0.5.4-py3-none-any.whl", hash = "sha256:203688429a99454ae261877dd48f68f65374edf92ba25796a6a8a2346fd005f0", size = 7790, upload_time = "2025-03-27T01:05:03.611Z" },
+]
+
+[[package]]
 name = "llama-index-llms-openai"
 version = "0.3.38"
 source = { registry = "https://pypi.org/simple" }
@@ -1024,6 +1039,19 @@ source = { registry = "https://pypi.org/simple" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/56/9a/fff8376f8e3d084cd1530e1ef7b879bb7d6d265620c95c1b322725c694f4/nvidia_nvtx_cu12-12.6.77-py3-none-manylinux2014_x86_64.manylinux_2_17_x86_64.whl", hash = "sha256:b90bed3df379fa79afbd21be8e04a0314336b8ae16768b58f2d34cb1d04cd7d2", size = 89276, upload_time = "2024-11-20T17:38:27.621Z" },
     { url = "https://files.pythonhosted.org/packages/9e/4e/0d0c945463719429b7bd21dece907ad0bde437a2ff12b9b12fee94722ab0/nvidia_nvtx_cu12-12.6.77-py3-none-manylinux2014_x86_64.whl", hash = "sha256:6574241a3ec5fdc9334353ab8c479fe75841dbe8f4532a8fc97ce63503330ba1", size = 89265, upload_time = "2024-10-01T17:00:38.172Z" },
+]
+
+[[package]]
+name = "ollama"
+version = "0.4.8"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "httpx" },
+    { name = "pydantic" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/e2/64/709dc99030f8f46ec552f0a7da73bbdcc2da58666abfec4742ccdb2e800e/ollama-0.4.8.tar.gz", hash = "sha256:1121439d49b96fa8339842965d0616eba5deb9f8c790786cdf4c0b3df4833802", size = 12972, upload_time = "2025-04-16T21:55:14.101Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/33/3f/164de150e983b3a16e8bf3d4355625e51a357e7b3b1deebe9cc1f7cb9af8/ollama-0.4.8-py3-none-any.whl", hash = "sha256:04312af2c5e72449aaebac4a2776f52ef010877c554103419d3f36066fe8af4c", size = 13325, upload_time = "2025-04-16T21:55:12.779Z" },
 ]
 
 [[package]]
