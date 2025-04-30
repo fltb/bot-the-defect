@@ -9,6 +9,7 @@ dependencies = [
     "llama-index-embeddings-huggingface>=0.5.3",
     "llama-index-llms-deepseek>=0.1.1",
     "llama-index-llms-ollama>=0.5.4",
+    "melobot>=3.2.1",
     "openai>=1.76.0",
     "python-dotenv>=1.1.0",
     "sentence-transformers>=4.1.0",
