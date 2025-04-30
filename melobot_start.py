@@ -27,6 +27,7 @@ async def echo_at(event: MessageEvent) -> None:
 
     msg = event.message
     text = "".join([m.to_dict()['data']['text'] if m.to_dict()['type'] == "text" else "" for m in msg])
+    text = text.lstrip()
     if text.startswith("/"):
         reply = manager.handle_command(str(user_id), text)
     else:
@@ -45,6 +46,7 @@ async def echo_is_private(event: MessageEvent) -> None:
 
     msg = event.message
     text = "".join([m.to_dict()['data']['text'] if m.to_dict()['type'] == "text" else "" for m in msg])
+    text = text.lstrip()
     if text.startswith("/"):
         reply = manager.handle_command(str(user_id), text)
     else:
