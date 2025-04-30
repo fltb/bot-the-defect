@@ -219,7 +219,7 @@ class Chatter:
         self.save_session()
 
     # 会话管理方法保持相同
-    def new_session(self, session_id: str = "") -> str:  # Fix parameter name
+    def new_session(self, session_id: str = None) -> str:  # Fix parameter name
         self.session_id = session_id or uuid.uuid4().hex  # Use proper variable
         self.chat_mem = ChatMemoryBuffer.from_defaults(
             token_limit=3000,
@@ -231,11 +231,11 @@ class Chatter:
     def save_session(self) -> bool:
         if not self.session_id:
             return False
-        self.chat_store.persist(self.storage_dir / f"history.json")
+        self.chat_store.persist(self.storage_dir / f"history{self.session_id}.json")
         return True
 
     def load_session(self, session_id: str) -> bool:
-        session_file = self.storage_dir / f"history.json"
+        session_file = self.storage_dir / f"history{self.session_id}.json"
         if not session_file.exists():
             self.new_session(session_id)  # Pass correct parameter
             return True
