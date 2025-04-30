@@ -72,12 +72,33 @@ def create_session(user_id: str, user_role:str, bot_role: str) -> Chatter:
         sys.exit(1)
 
     if user_id in USER_SESSIONS:
-        session_id = USER_SESSIONS[user_id]
+        user_data = USER_SESSIONS[user_id]
+        if isinstance(user_data, dict):
+            session_id = user_data['session_id']
+            # Update roles in existing session
+            USER_SESSIONS[user_id].update({
+                'user_role': user_role,
+                'bot_role': bot_role
+            })
+        else:  # Backward compatibility
+            session_id = user_data
+            USER_SESSIONS[user_id] = {
+                'session_id': session_id,
+                'user_role': user_role,
+                'bot_role': bot_role
+            }
     else:
         session_id = uuid.uuid4().hex
-        USER_SESSIONS[user_id] = session_id
-        with open('storage/user-session/users.json', 'w') as f:
-            json.dump(USER_SESSIONS, f)
+        USER_SESSIONS[user_id] = {
+            'session_id': session_id,
+            'user_role': user_role,
+            'bot_role': bot_role
+        }
+
+    # Write updated sessions to file
+    with open('storage/user-session/users.json', 'w', encoding='utf-8') as f:
+        json.dump(USER_SESSIONS, f, indent=2)
+
 
     chatter = Chatter(
         bot_role=bot_role,
