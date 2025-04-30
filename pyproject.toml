@@ -5,6 +5,7 @@ description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
+    "huggingface-hub[hf-xet]>=0.30.2",
     "llama-index>=0.12.33",
     "llama-index-embeddings-huggingface>=0.5.3",
     "llama-index-llms-deepseek>=0.1.1",
