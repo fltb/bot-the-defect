@@ -15,7 +15,7 @@ class RoleValidationError(Exception):
 
 DEFAULT_USER_ROLE="Dave"
 DEFAULT_BOT_ROLE="Dean"
-
+os.makedirs('storage/user-session/', exist_ok=True)
 def get_llm_by_name(model_name: str):
     """LLM factory supporting multiple model types"""
     if model_name.startswith("deepseek-"):
@@ -311,6 +311,13 @@ class SessionManager:
                 if not session:
                     return "No active session. Start with: /new <role>"
                 return session['chatter'].chat(message)
+
+    def get_response(self, user_id: str, message: str) -> str:
+        with self._session_lock:
+            session = self._sessions.get(user_id)
+            if not session:
+                return "No active session. Start with: /new <role>"
+            return session['chatter'].chat(message)
 
 if __name__ == '__main__':
     import sys
