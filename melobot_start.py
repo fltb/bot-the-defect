@@ -9,12 +9,12 @@ from dotenv import load_dotenv
 from chatter_interface import SessionManager
 
 _sessions = {}  # {user_id: SessionManager}
-
+session_manager = SessionManager()
 def _get_manager(user_id: str) -> SessionManager:
     if user_id not in _sessions:
-        _sessions[user_id] = SessionManager()
-        _sessions[user_id].load_session(user_id)
-    return _sessions[user_id]
+        _sessions[user_id] = True
+        session_manager.load_session(user_id)
+    return session_manager
 
 load_dotenv()
 
