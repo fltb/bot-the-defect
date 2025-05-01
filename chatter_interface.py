@@ -139,6 +139,7 @@ class SessionManager:
             'bot_role': target['bot_role'],
             'user_role': target['user_role'],
         })
+        self.save_user_sessions()
         try:
             with self._session_lock:
                 # Recreate chatter with stored session data
@@ -155,9 +156,9 @@ class SessionManager:
                     'session_id': session_id,
                     'llm': Settings.llm
                 }
-            return f"[信息]切换到会话： {session_id}"
         except Exception as e:
             return f"[错误]切换会话失败: {str(e)}"
+        return f"[信息]切换到会话： {session_id}"
 
     def delete_session(self, user_id: str, session_id: str) -> str:
         """Delete a specific session"""
