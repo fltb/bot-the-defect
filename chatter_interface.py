@@ -49,16 +49,6 @@ class SessionManager:
             'handler': self._handle_new,
             'help': '/new [user] [bot] - 创建新会话'
         },
-        'switch_bot_role': {
-            'aliases': ['sbr', 'bot'],
-            'handler': self._handle_switch_bot,
-            'help': '/bot <role> - 切换机器人角色'
-        },
-        'switch_user_role': {
-            'aliases': ['sur', 'user'],
-            'handler': self._handle_switch_user,
-            'help': '/user <role> - 切换用户角色'
-        },
         'switch_llm': {
             'aliases': ['sl', 'model'],
             'handler': self._handle_switch_llm,

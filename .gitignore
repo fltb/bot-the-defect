@@ -12,3 +12,4 @@ extract-text/output/
 storage/
 # Virtual environments
 .venv
+.vscode
