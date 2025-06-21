@@ -28,21 +28,21 @@ DEEPSEEK_API_KEY = os.getenv("DEEPSEEK_API_KEY")
 ADMIN_USER_IDS = [int(uid) for uid in os.getenv("ADMIN_USER_IDS", "").split(',') if uid]
 
 RSS_FEEDS = {
-    # '订阅源名称': 'RSS URL'
-    "OSChina": "https://www.oschina.net/news/rss",
-    "36Kr": "https://36kr.com/feed",
-    "Hacker News": "https://news.ycombinator.com/rss",
+    feed.split('|')[0]: feed.split('|')[1]
+    for feed in os.getenv("RSS_FEEDS", "").split(';')
+    if feed and '|' in feed
 }
 
 # 报告相关配置
-NEWS_REPORT_TITLE = "今日技术资讯摘要"
-MAX_ITEMS_PER_FEED = 3  # 每个订阅源最多取几条
-MAX_TOTAL_ITEMS = 15    # 报告中最多包含几条新闻
-TIMEZONE = "Asia/Shanghai" # 时区
-INCLUDE_KEYWORDS: List[str] = []
-EXCLUDE_KEYWORDS: List[str] = []
-REPORT_FORMAT = "text"
+NEWS_REPORT_TITLE = os.getenv("NEWS_REPORT_TITLE", "今日技术资讯摘要")
+MAX_ITEMS_PER_FEED = int(os.getenv("MAX_ITEMS_PER_FEED", "3"))
+MAX_TOTAL_ITEMS = int(os.getenv("MAX_TOTAL_ITEMS", "15"))
+TIMEZONE = os.getenv("TIMEZONE", "Asia/Shanghai")
+INCLUDE_KEYWORDS: List[str] = os.getenv("INCLUDE_KEYWORDS", "").split(',')
+EXCLUDE_KEYWORDS: List[str] = os.getenv("EXCLUDE_KEYWORDS", "").split(',')
+REPORT_FORMAT = os.getenv("REPORT_FORMAT", "text")
 # --- Scheduler (修改以适应新闻报告) ---
+
 NEWS_SCHEDULE_CONFIG = {
     "enabled": os.getenv("NEWS_ENABLED", "true").lower() == "true",
     "job_name": "daily_rss_report",
