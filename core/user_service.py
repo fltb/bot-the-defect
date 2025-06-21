@@ -124,9 +124,21 @@ class UserService(IUserService):
 
         chat = self._get_active_chat(user_id)
         if not chat:
-            print("No Active Detected")
-            return f"无活动会话。使用 /new <模式> 开启。\n可用模式: {', '.join(self._factories.keys())}"
-        
+            # 1) Notify about default mode
+            notice = (f"当前无活动会话。可以使用 /new <模式> 开启。\n可用模式: {', '.join(self._factories.keys())}\n"
+                     "根据默认规则创建会话 （/new pwvn Dave Dean）：")
+            # 2) Call your `/new pwvn Dave Dean`
+            new_output = await self._handle_new_session(user_id, "pwvn Dave Dean")
+            # 3) Fetch the freshly-created chat service
+            chat = self._get_active_chat(user_id)
+            if not chat:
+                # Fallback in case creation failed
+                return f"{notice}\n{new_output}"
+            # 4) Send the original message into the new chat
+            chat_output = chat.get_response(message)
+            # 5) Concatenate and return everything
+            return "\n".join([notice, new_output, chat_output])
+
         return chat.get_response(message)
 
     async def _handle_user_command(self, user_id: int, message: str) -> str:
@@ -169,7 +181,7 @@ class UserService(IUserService):
         session_info = None
         if mode == 'pwvn':
             if len(mode_args) < 2:
-                return "用法: /new pwvn <你的角色> <Bot角色>"
+                return f"用法: /new pwvn <你的角色> <Bot角色>， 你的角色任意，Bot 角色可选：{",".join(self.AVAILABLE_ROLES)}"
             user_role, bot_role = mode_args[0], mode_args[1]
             try:
                 self._validate_role(bot_role)
