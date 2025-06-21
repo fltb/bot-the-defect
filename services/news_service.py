@@ -29,7 +29,7 @@ class TextRenderer:
             lines.append(f"{i}. [{it.source}] {it.title}")
             if it.summary:
                 lines.append(f"   摘要: {it.summary}")
-            lines.append(f"   链接: {it.link}\n")
+            # lines.append(f"   链接: {it.link}\n")
         return "\n".join(lines)
 
 class MarkdownRenderer:
