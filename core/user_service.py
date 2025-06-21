@@ -108,7 +108,7 @@ class UserService(IUserService):
     async def handle_message(self, user_id: int, message: str) -> str:
         message = message.strip()
         if not message:
-            return ""
+            message = ""
 
         if message.startswith('/admin'):
             try:
@@ -124,7 +124,8 @@ class UserService(IUserService):
 
         chat = self._get_active_chat(user_id)
         if not chat:
-            return f"无活动会话。使用 `/new <模式>` 开启。\n可用模式: {', '.join(self._factories.keys())}"
+            print("No Active Detected")
+            return f"无活动会话。使用 /new <模式> 开启。\n可用模式: {', '.join(self._factories.keys())}"
         
         return chat.get_response(message)
 
