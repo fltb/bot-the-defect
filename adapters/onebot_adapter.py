@@ -4,6 +4,7 @@ import asyncio
 from melobot import Bot, PluginPlanner
 from melobot.protocols.onebot.v11.handle import on_at_qq
 from melobot.protocols.onebot.v11 import MessageEvent, on_message, ForwardWebSocketIO, OneBotV11Protocol
+from melobot import send_text
 
 from config import settings
 from core.interfaces import IMessagePusher, IUserService
@@ -13,7 +14,7 @@ from services.factories import PWVNRoleplayChatServiceFactory, GeneralChatServic
 from services.llm_factory import initialize_global_llm
 from services.news_service import NewsService
 from services.scheduler_service import SchedulerService
-
+from melobot.protocols.onebot.v11.adapter import Adapter
 
 class OneBotV11Pusher(IMessagePusher):
     """
@@ -50,7 +51,7 @@ class OneBotV11Pusher(IMessagePusher):
         parts = self._split_message(message)
         for idx, part in enumerate(parts, 1):
             try:
-                await self._bot.get_adapter().send_custom(user_id=user_id, message=part)
+                await self._bot.get_adapter(Adapter).send_custom(user_id=user_id, msgs=part)
                 logging.info(f"[Private] Sent part {idx}/{len(parts)} to user {user_id} (len={len(part)})")
             except Exception as e:
                 logging.error(f"Failed to send private part {idx} to {user_id}: {e}", exc_info=True)
@@ -59,7 +60,7 @@ class OneBotV11Pusher(IMessagePusher):
         parts = self._split_message(message)
         for idx, part in enumerate(parts, 1):
             try:
-                await self._bot.get_adapter().send_custom(group_id=group_id, message=part)
+                await self._bot.get_adapter(Adapter).send_custom(group_id=group_id, msgs=part)
                 logging.info(f"[Group] Sent part {idx}/{len(parts)} to group {group_id} (len={len(part)})")
             except Exception as e:
                 logging.error(f"Failed to send group part {idx} to {group_id}: {e}", exc_info=True)
@@ -77,7 +78,6 @@ def register_message_handlers(bot: Bot, user_service: IUserService) -> PluginPla
         text = "".join(m.to_dict()['data']['text'] for m in event.message if m.to_dict()['type'] == 'text').lstrip()
         reply = await user_service.handle_message(user_id, text)
         # 发送回复
-        from melobot import send_text
         await send_text(reply)
 
     @on_message()
@@ -87,7 +87,6 @@ def register_message_handlers(bot: Bot, user_service: IUserService) -> PluginPla
         user_id = event.user_id
         text = "".join(m.to_dict()['data']['text'] for m in event.message if m.to_dict()['type'] == 'text').lstrip()
         reply = await user_service.handle_message(user_id, text)
-        from melobot import send_text
         await send_text(reply)
 
     planner = PluginPlanner(version="1.0.0", flows=[handle_group_at, handle_private])
