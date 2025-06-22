@@ -17,6 +17,9 @@ PWVN_CHAT_STORE_PATH = os.path.join(PROJECT_ROOT, "storage/chat-session")
 # --- Bot & Framework ---
 ONEBOT_WS_URL = os.getenv("ONEBOT_WS_URL", "ws://127.0.0.1:8080")
 BOT_QQ_ID = int(os.getenv("BOT_QQ_ID", 0))
+ENABLED_GROUP_IDS = [
+    int(gid) for gid in os.getenv("ENABLED_GROUP_IDS", "").split(',') if gid
+]
 
 # --- LLM ---
 # "true" or "false"

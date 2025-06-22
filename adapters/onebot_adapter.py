@@ -3,7 +3,7 @@ import asyncio
 
 from melobot import Bot, PluginPlanner
 from melobot.protocols.onebot.v11.handle import on_at_qq
-from melobot.protocols.onebot.v11 import MessageEvent, on_message, ForwardWebSocketIO, OneBotV11Protocol
+from melobot.protocols.onebot.v11 import MessageEvent, on_message, GroupMsgChecker, LevelRole, ForwardWebSocketIO, OneBotV11Protocol
 from melobot import send_text
 
 from config import settings
@@ -15,7 +15,6 @@ from services.llm_factory import initialize_global_llm
 from services.news_service import NewsService
 from services.scheduler_service import SchedulerService
 from melobot.protocols.onebot.v11.adapter import Adapter
-
 class OneBotV11Pusher(IMessagePusher):
     """
     IMessagePusher 接口的 OneBot V11 实现。
@@ -71,8 +70,12 @@ def register_message_handlers(bot: Bot, user_service: IUserService) -> PluginPla
     注册 OneBot V11 的消息处理器，返回一个 PluginPlanner。
     包含群 @ 匹配和私聊匹配两种场景。
     """
-    @on_at_qq(qid=settings.BOT_QQ_ID)
+    @on_at_qq(qid=settings.BOT_QQ_ID, checker=GroupMsgChecker(
+        role=LevelRole.NORMAL,
+        white_groups=settings.ENABLED_GROUP_IDS
+    ))
     async def handle_group_at(event: MessageEvent) -> None:
+
         user_id = event.user_id
         # 拼接文本消息
         text = "".join(m.to_dict()['data']['text'] for m in event.message if m.to_dict()['type'] == 'text').lstrip()
