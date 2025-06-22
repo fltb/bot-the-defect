@@ -56,7 +56,7 @@ This project uses a strict three-layer architecture to ensure a clean separation
       v                           v
 +-------------------------------------------------------------------+
 | Adapter Layer (onebot_adapter.py implementing IMessagePusher)     |<-+
-+-------------------------------------------------------------------+  | (Push Msg)                                                             |
++-------------------------------------------------------------------+  | (Push Msg)
       | (Calls handle_message)                                         |
       v                                                                |
 +-------------------------------------------------------------------+  |
