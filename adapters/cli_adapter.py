@@ -2,6 +2,7 @@
 import asyncio
 import logging
 import functools
+from apscheduler.schedulers.asyncio import AsyncIOScheduler
 
 from config import settings
 from core.interfaces import IMessagePusher
@@ -77,8 +78,18 @@ async def main():
     cli_pusher = CLIPusher()
     
     # 实例化所有服务，并将 cli_pusher 注入
+    scheduler = AsyncIOScheduler()
+    
+    # 实例化所有服务，并将 cli_pusher 和 scheduler 注入
     news_service = NewsService()
-    scheduler_service = SchedulerService(news_service=news_service, pusher=cli_pusher)
+
+    scheduler.start()
+    
+    scheduler_service = SchedulerService(
+        news_service=news_service,
+        scheduler=scheduler,  # 传入 scheduler 实例
+        pusher=cli_pusher
+    )
     admin_service = AdminService(scheduler_service=scheduler_service) # Admin 也可触发任务
     
     factories = {
@@ -110,7 +121,7 @@ async def main():
     await cli_loop(user_service, user_id)
 
     # 优雅地关闭调度器
-    scheduler_service.cleanup()
+    scheduler.shutdown()
     print("\nScheduler stopped. Goodbye!")
 
 if __name__ == "__main__":

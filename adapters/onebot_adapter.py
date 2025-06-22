@@ -1,10 +1,10 @@
 import logging
-import asyncio
 
 from melobot import Bot, PluginPlanner
 from melobot.protocols.onebot.v11.handle import on_at_qq
 from melobot.protocols.onebot.v11 import MessageEvent, on_message, GroupMsgChecker, LevelRole, ForwardWebSocketIO, OneBotV11Protocol
 from melobot import send_text
+from apscheduler.schedulers.asyncio import AsyncIOScheduler
 
 from config import settings
 from core.interfaces import IMessagePusher, IUserService
@@ -15,6 +15,7 @@ from services.llm_factory import initialize_global_llm
 from services.news_service import NewsService
 from services.scheduler_service import SchedulerService
 from melobot.protocols.onebot.v11.adapter import Adapter
+
 class OneBotV11Pusher(IMessagePusher):
     """
     IMessagePusher 接口的 OneBot V11 实现。
@@ -111,10 +112,22 @@ def main():
     bot = Bot(__name__)
     bot.add_protocol(OneBotV11Protocol(ForwardWebSocketIO(settings.ONEBOT_WS_URL)))
 
+    scheduler = AsyncIOScheduler()
+    
+    @bot.on_started
+    async def init():
+        scheduler.start()
+        logging.info("scheduler 已启动")
+
+    @bot.on_stopped
+    async def stop():
+        scheduler.shutdown()
+        logging.info("scheduler 已正常退出")
+
     # Pusher & 服务
     onebot_pusher = OneBotV11Pusher(bot)
     news_service = NewsService()
-    scheduler_service = SchedulerService(news_service=news_service, pusher=onebot_pusher)
+    scheduler_service = SchedulerService(news_service=news_service, scheduler=scheduler, pusher=onebot_pusher)
     admin_service = AdminService(scheduler_service=scheduler_service)
 
     factories = {

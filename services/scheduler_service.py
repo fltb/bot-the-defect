@@ -1,4 +1,4 @@
-from apscheduler.schedulers.background import BackgroundScheduler
+from apscheduler.schedulers.asyncio import AsyncIOScheduler
 import logging
 
 from config import settings
@@ -6,8 +6,8 @@ from core.interfaces import IMessagePusher
 from services.news_service import NewsService
 
 class SchedulerService:
-    def __init__(self, news_service: NewsService, pusher: IMessagePusher):
-        self._scheduler = BackgroundScheduler(timezone=settings.TIMEZONE)
+    def __init__(self, news_service: NewsService, scheduler: AsyncIOScheduler, pusher: IMessagePusher):
+        self._scheduler = scheduler
         self._news_service = news_service
         self._pusher = pusher
 
@@ -49,8 +49,4 @@ class SchedulerService:
             )
             logging.info(f"Scheduled job '{cfg['job_name']}' daily at {cfg['hour']}:{cfg['minute']}.")
         
-        self._scheduler.start()
         logging.info("Scheduler service started.")
-    
-    def cleanup(self):
-        self._scheduler.shutdown()
